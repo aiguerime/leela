@@ -34,11 +34,6 @@ function openModal(index) {
     modal.addEventListener('touchmove', handleTouchMove);
     modal.addEventListener('touchend', handleTouchEnd);
 
-    // Add event listener to close the modal when image is clicked
-    modalImg.onclick = function() {
-        closeModal();
-    };
-
     // Add event listener to close the modal when clicking outside the image
     modal.onclick = function(event) {
         if (event.target === modal) {
