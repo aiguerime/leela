@@ -8,30 +8,84 @@
 </head>
 
 <script>
-// Function to open modal with specific image
-function openModal(modalId, imagePath) {
-    const modal = document.getElementById(modalId);
-    const modalImg = modal.querySelector('img');
+
+let currentIndex = 0;
+const reviewImages = [
+    'review1.jpg', 'review2.jpg', 'review3.jpg', 
+    'review4.jpg', 'review5.jpg', 'review6.jpg',
+    'review7.jpg', 'review8.jpg', 'review9.jpg',
+    'review10.jpg', 'review11.jpg', 'review12.jpg'
+];
+
+let modal = document.getElementById('reviewModal');
+let modalImg = document.getElementById('carouselImg');
+let touchStartX = 0;
+let touchEndX = 0;
+
+// Open modal and display the image at the given index
+function openModal(index) {
+    modal = document.getElementById('reviewModal');
+    modalImg = document.getElementById('carouselImg');
+
+    currentIndex = index;
     modal.style.display = 'block';
-    modalImg.src = imagePath; // Set the correct large image
+    modalImg.src = reviewImages[currentIndex];
+    modal.addEventListener('touchstart', handleTouchStart);
+    modal.addEventListener('touchmove', handleTouchMove);
+    modal.addEventListener('touchend', handleTouchEnd);
 
     // Add event listener to close the modal when image is clicked
     modalImg.onclick = function() {
-        closeModal(modalId);
+        closeModal();
     };
 
     // Add event listener to close the modal when clicking outside the image
     modal.onclick = function(event) {
         if (event.target === modal) {
-            closeModal(modalId);
+            closeModal();
         }
     };
 }
 
-// Function to close modal
-function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
+// Close the modal
+function closeModal() {
     modal.style.display = 'none';
+    modal.removeEventListener('touchstart', handleTouchStart);
+    modal.removeEventListener('touchmove', handleTouchMove);
+    modal.removeEventListener('touchend', handleTouchEnd);
+}
+
+// Function to handle the start of the touch event
+function handleTouchStart(event) {
+    touchStartX = event.changedTouches[0].screenX;
+}
+
+// Function to handle touch move (swipe detection)
+function handleTouchMove(event) {
+    touchEndX = event.changedTouches[0].screenX;
+}
+
+// Function to handle the end of the touch event
+function handleTouchEnd() {
+    if (touchEndX < touchStartX - 50) {
+        // Swipe left, show next image
+        nextImage();
+    } else if (touchEndX > touchStartX + 50) {
+        // Swipe right, show previous image
+        prevImage();
+    }
+}
+
+// Function to show the next image
+function nextImage() {
+    currentIndex = (currentIndex + 1) % reviewImages.length; // Loop back to the first image
+    modalImg.src = reviewImages[currentIndex];
+}
+
+// Function to show the previous image
+function prevImage() {
+    currentIndex = (currentIndex - 1 + reviewImages.length) % reviewImages.length; // Loop to the last image
+    modalImg.src = reviewImages[currentIndex];
 }
 
 </script>
@@ -130,103 +184,48 @@ function closeModal(modalId) {
         <h2>Отзывы</h2>
         <div class="review-thumbnails">
             <!-- Thumbnails for 12 reviews -->
-            <div class="review-thumbnail" onclick="openModal('review1', 'review1.jpg')">
+            <div class="review-thumbnail" onclick="openModal(0)">
                 <img src="review1.jpg" alt="Review 1 Thumbnail">
             </div>
-            <div class="review-thumbnail" onclick="openModal('review2', 'review2.jpg')">
+            <div class="review-thumbnail" onclick="openModal(1)">
                 <img src="review2.jpg" alt="Review 2 Thumbnail">
             </div>
-            <div class="review-thumbnail" onclick="openModal('review3', 'review3.jpg')">
+            <div class="review-thumbnail" onclick="openModal(2)">
                 <img src="review3.jpg" alt="Review 3 Thumbnail">
             </div>
-            <div class="review-thumbnail" onclick="openModal('review4', 'review4.jpg')">
+            <div class="review-thumbnail" onclick="openModal(3)">
                 <img src="review4.jpg" alt="Review 4 Thumbnail">
             </div>
-            <div class="review-thumbnail" onclick="openModal('review5', 'review5.jpg')">
+            <div class="review-thumbnail" onclick="openModal(4)">
                 <img src="review5.jpg" alt="Review 5 Thumbnail">
             </div>
-            <div class="review-thumbnail" onclick="openModal('review6', 'review6.jpg')">
+            <div class="review-thumbnail" onclick="openModal(5)">
                 <img src="review6.jpg" alt="Review 6 Thumbnail">
             </div>
-            <div class="review-thumbnail" onclick="openModal('review7', 'review7.jpg')">
+            <div class="review-thumbnail" onclick="openModal(6)">
                 <img src="review7.jpg" alt="Review 7 Thumbnail">
             </div>
-            <div class="review-thumbnail" onclick="openModal('review8', 'review8.jpg')">
+            <div class="review-thumbnail" onclick="openModal(7)">
                 <img src="review8.jpg" alt="Review 8 Thumbnail">
             </div>
-            <div class="review-thumbnail" onclick="openModal('review9', 'review9.jpg')">
+            <div class="review-thumbnail" onclick="openModal(8)">
                 <img src="review9.jpg" alt="Review 9 Thumbnail">
             </div>
-            <div class="review-thumbnail" onclick="openModal('review10', 'review10.jpg')">
+            <div class="review-thumbnail" onclick="openModal(9)">
                 <img src="review10.jpg" alt="Review 10 Thumbnail">
             </div>
-            <div class="review-thumbnail" onclick="openModal('review11', 'review11.jpg')">
+            <div class="review-thumbnail" onclick="openModal(10)">
                 <img src="review11.jpg" alt="Review 11 Thumbnail">
             </div>
-            <div class="review-thumbnail" onclick="openModal('review12', 'review12.jpg')">
+            <div class="review-thumbnail" onclick="openModal(11)">
                 <img src="review12.jpg" alt="Review 12 Thumbnail">
             </div>
         </div>
     
-        <!-- Modal Section for 12 reviews -->
-        <div id="review1" class="modal">
-            <span class="close" onclick="closeModal('review1')">&times;</span>
-            <img class="modal-content" id="img1">
-        </div>
-    
-        <div id="review2" class="modal">
-            <span class="close" onclick="closeModal('review2')">&times;</span>
-            <img class="modal-content" id="img2">
-        </div>
-    
-        <div id="review3" class="modal">
-            <span class="close" onclick="closeModal('review3')">&times;</span>
-            <img class="modal-content" id="img3">
-        </div>
-    
-        <div id="review4" class="modal">
-            <span class="close" onclick="closeModal('review4')">&times;</span>
-            <img class="modal-content" id="img4">
-        </div>
-    
-        <div id="review5" class="modal">
-            <span class="close" onclick="closeModal('review5')">&times;</span>
-            <img class="modal-content" id="img5">
-        </div>
-    
-        <div id="review6" class="modal">
-            <span class="close" onclick="closeModal('review6')">&times;</span>
-            <img class="modal-content" id="img6">
-        </div>
-    
-        <div id="review7" class="modal">
-            <span class="close" onclick="closeModal('review7')">&times;</span>
-            <img class="modal-content" id="img7">
-        </div>
-    
-        <div id="review8" class="modal">
-            <span class="close" onclick="closeModal('review8')">&times;</span>
-            <img class="modal-content" id="img8">
-        </div>
-    
-        <div id="review9" class="modal">
-            <span class="close" onclick="closeModal('review9')">&times;</span>
-            <img class="modal-content" id="img9">
-        </div>
-    
-        <div id="review10" class="modal">
-            <span class="close" onclick="closeModal('review10')">&times;</span>
-            <img class="modal-content" id="img10">
-        </div>
-    
-        <div id="review11" class="modal">
-            <span class="close" onclick="closeModal('review11')">&times;</span>
-            <img class="modal-content" id="img11">
-        </div>
-    
-        <div id="review12" class="modal">
-            <span class="close" onclick="closeModal('review12')">&times;</span>
-            <img class="modal-content" id="img12">
+        <!-- Modal Section for Carousel -->
+        <div id="reviewModal" class="modal">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img class="modal-content" id="carouselImg">
         </div>
     </section>
     
